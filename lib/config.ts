@@ -12,7 +12,7 @@ export const hosts: Host[] = [
     id: "raksha",
     name: "Raksha",
     email: "rakshamuthukumaar05@gmail.com",
-    role: "AyuPulse Co-Founder",
+    role: "Co-Founder, AyuPulse",
     initials: "R"
   }
 ];
