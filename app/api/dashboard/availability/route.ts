@@ -71,7 +71,11 @@ export async function POST(request: Request) {
 
   const body = await request.json();
 
-  if (!isValidDate(body.available_date) || !isValidTime(body.start_time) || !isValidTime(body.end_time)) {
+  if (
+    !isValidDate(body.available_date) ||
+    !isValidTime(body.start_time) ||
+    !isValidTime(body.end_time)
+  ) {
     return NextResponse.json({ error: "Invalid availability window." }, { status: 400 });
   }
 
@@ -83,12 +87,17 @@ export async function POST(request: Request) {
 
   const { data, error: insertError } = await supabase
     .from("availability_windows")
-    .insert({
-      host_id: host.id,
-      available_date: body.available_date,
-      start_time: body.start_time,
-      end_time: body.end_time
-    })
+    .upsert(
+      {
+        host_id: host.id,
+        available_date: body.available_date,
+        start_time: body.start_time,
+        end_time: body.end_time
+      },
+      {
+        onConflict: "host_id,available_date,start_time,end_time"
+      }
+    )
     .select()
     .single();
 
